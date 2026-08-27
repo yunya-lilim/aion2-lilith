@@ -62,8 +62,8 @@ h1{font-size:20px;margin:0 0 3px}.subtitle{font-size:11px;color:var(--muted)}.ch
 </div>
 <script>
 const K="aion2_lilith_pwa_v2",uid=()=>Math.random().toString(36).slice(2)+Date.now();
-const DD=[["ログインボーナス","毎日の報酬"],["デイリークエスト","今日のデイリー"],["デイリーダンジョン","回数がある場合"],["無料報酬・ショップ確認","無料分だけ"]];
-const WW=[["週間クエスト","今週分"],["週間ダンジョン","週制限"],["週課報酬","受け取り忘れチェック"]];
+const DD=[["デイリーダンジョン","強化石✿ペット✿キーナ"],["シューゴ祭","毎時00分"],["亀裂","毎時30分"],["ナイトメア","毎日2回"]];
+const WW=[["アセンショントライアル","今週分"],["週間ダンジョン","週制限"],["週課報酬","受け取り忘れチェック"]];
 let d=JSON.parse(localStorage.getItem(K)||"null");
 if(!d){d={s:{hour:4,day:1},chars:{},cur:"ゆにゃりりむ"};d.chars[d.cur]={daily:DD.map(x=>({id:uid(),name:x[0],note:x[1],done:false})),weekly:WW.map(x=>({id:uid(),name:x[0],done:false})),ds:null,ws:null}}
 const $=x=>document.getElementById(x),save=()=>localStorage.setItem(K,JSON.stringify(d)),c=()=>d.chars[d.cur];
