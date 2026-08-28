@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#efbfd7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="AION2 ♡">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<title>AION2 Daily Manager ♡</title>
+<style>
+:root{
+  --pink:#e59ab9;--pink2:#f5c9dc;--pale:#ffeef6;
+  --dark:#241d27;--dark2:#302632;--dark3:#3a2d3a;
+  --text:#fff9fc;--muted:#d9bfcf;--accent:#efa7c5;
+  --bg:#f4d3e2;--line:#654d62;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#efd0df}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",sans-serif;
+  color:var(--dark);
+  background:
+    radial-gradient(circle at 12% 17%,rgba(255,255,255,.72) 0 2px,transparent 3px),
+    radial-gradient(circle at 84% 28%,rgba(255,255,255,.55) 0 2px,transparent 3px),
+    radial-gradient(circle at 23% 57%,rgba(255,255,255,.42) 0 2px,transparent 3px),
+    linear-gradient(145deg,#f9ddea 0%,#f3cddd 48%,#ebd7e5 100%);
+}
+button,input,select{font:inherit}button{border:0}
+.app{width:min(100%,680px);margin:auto;padding:0 12px calc(20px + env(safe-area-inset-bottom))}
+.top-lace{
+  height:66px;margin:0 -12px 7px;position:relative;overflow:hidden;
+  background:#f0c6d9;
+  border-bottom:0;
+  box-shadow:0 2px 7px rgba(62,34,56,.18);
+}
+/* 画像イメージに合わせた「黒いレース本体」 */
+.top-lace:before{
+  content:"";position:absolute;left:0;right:0;top:0;height:49px;
+  background:
+    /* 小さな花・ハートのような透かし */
+    radial-gradient(ellipse 7px 4px at 12px 10px,rgba(246,184,207,.55) 0 45%,transparent 48%) 0 0/44px 20px,
+    radial-gradient(ellipse 6px 3px at 34px 15px,rgba(246,184,207,.35) 0 45%,transparent 48%) 0 0/44px 20px,
+    /* レースの黒い波 */
+    radial-gradient(ellipse 31px 25px at 16px 2px,#2b202b 0 70%,transparent 72%) 0 0/52px 34px repeat-x,
+    linear-gradient(#2a202b 0 70%,transparent 71%);
+  border-bottom:1px solid rgba(255,255,255,.45);
+  filter:drop-shadow(0 2px 2px rgba(52,30,47,.28));
+}
+/* レースの細い縁取り＋ぶら下がるチェーン */
+.top-lace:after{
+  content:"";position:absolute;left:0;right:0;top:34px;height:30px;
+  background:
+    /* ビーズチェーン */
+    radial-gradient(circle 2px at 9px 5px,#d99bb8 0 90%,transparent 100%) 0 0/18px 12px,
+    radial-gradient(circle 2px at 18px 11px,#d99bb8 0 90%,transparent 100%) 0 0/18px 12px,
+    /* ピンクの吊り飾り */
+    linear-gradient(120deg,transparent 45%,#d89ab6 46% 50%,transparent 51%) 6px 0/32px 18px repeat-x,
+    /* レース下端 */
+    radial-gradient(ellipse 17px 10px at 17px 1px,#2a202b 0 72%,transparent 74%) 0 0/34px 18px repeat-x;
+  opacity:.95;
+}
+.ribbon{
+  position:absolute;z-index:3;color:#f0a6c5;font-size:15px;top:7px;
+  text-shadow:0 1px 2px #201720;
+}
+.ribbon.l{left:14px}.ribbon.r{right:14px}
+
+/* レースの小さなリボン飾り */
+.top-lace .lace-bow{
+  position:absolute;z-index:4;top:7px;color:#e8a4c2;font-size:14px;
+  text-shadow:0 1px 2px #201720;
+}
+.top-lace .lace-bow:nth-of-type(1){left:18%}
+.top-lace .lace-bow:nth-of-type(2){left:50%}
+.top-lace .lace-bow:nth-of-type(3){right:17%}
+
+.hero{
+  position:relative;overflow:hidden;padding:10px 10px 12px;
+  border-radius:22px;background:rgba(250,218,232,.88);
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow:0 7px 20px rgba(83,49,75,.12);
+}
+.hero-main{
+  display:grid;grid-template-columns:135px 1fr auto;align-items:center;gap:10px;position:relative;z-index:2;
+}
+.char{
+  width:135px;height:135px;object-fit:cover;border-radius:18px;
+  border:0;background:#ead6e4;box-shadow:0 7px 18px rgba(57,34,54,.17);
+}
+.brand{min-width:0}
+.brand h1{
+  margin:0;color:#33202f;font-family:Georgia,"Times New Roman",serif;
+  font-size:28px;letter-spacing:.04em;line-height:1.05
+}
+.brand .eng{
+  margin-top:2px;font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;font-size:18px;font-weight:700;color:#422d3e
+}
+.tag{
+  display:inline-block;margin-top:7px;padding:5px 13px;border-radius:999px;
+  background:#30222e;color:#ffeef7;font-size:10px;font-weight:900
+}
+.charname{margin-top:7px;color:#fff;font-size:14px;font-weight:1000}
+.charname:before{content:"♥ ";color:#f0a4c3}
+.level{margin-top:2px;color:#f6d8e7;font-size:10px;font-weight:800}
+.switch{
+  align-self:center;padding:11px 10px;border-radius:17px;background:#fff1f7;
+  color:#6f5069;font-size:10px;font-weight:1000;box-shadow:0 4px 10px rgba(70,42,65,.1)
+}
+.wing{
+  position:absolute;z-index:0;color:#d990b1;opacity:.55;line-height:1;
+  text-shadow:0 2px 4px rgba(70,35,60,.18);pointer-events:none;
+}
+.wing.w1{top:54px;left:45%;font-size:24px;transform:rotate(-18deg)}
+.wing.w2{top:132px;right:10px;font-size:19px;transform:rotate(18deg)}
+.wing.w3{bottom:14px;left:12px;font-size:18px;transform:rotate(-28deg)}
+.wing.w4{bottom:10px;right:25%;font-size:25px;transform:rotate(24deg)}
+.hero:before,.hero:after{position:absolute;content:"♥";color:#9e6388;opacity:.18}
+.hero:before{top:8px;right:112px;font-size:19px}.hero:after{bottom:7px;right:13px;font-size:22px}
+
+.progress-card{
+  margin-top:9px;padding:13px 12px 12px;border-radius:20px;
+  background:linear-gradient(145deg,#241d27,#302531);color:white;
+  box-shadow:0 7px 17px rgba(46,27,43,.18);border:1px solid #584453;
+  text-align:center;position:relative;overflow:hidden;
+}
+.progress-card:before,.progress-card:after{
+  content:"♆";position:absolute;color:#d98cad;opacity:.65;font-size:20px;top:42%
+}
+.progress-card .deco-wing{position:absolute;color:#d98cad;opacity:.6;font-size:24px;pointer-events:none}
+.progress-card .deco-wing.left{left:8px;bottom:8px;transform:rotate(-24deg)}
+.progress-card .deco-wing.right{right:8px;bottom:8px;transform:rotate(24deg)}
+.progress-card:before{left:16px}.progress-card:after{right:16px}
+.progress-title{font-size:14px;font-weight:1000;letter-spacing:.05em;position:relative;z-index:2}
+.progress-title:before{content:"♥ ";color:#efabc8}.progress-title:after{content:" ♥";color:#efabc8}
+.progress-number{margin-top:1px;font-size:34px;font-weight:1000;color:#f0a9c7}
+.progress-number span{font-size:13px;color:#fff;font-weight:800;margin-left:4px}
+.progress-remain{font-size:13px;font-weight:900;margin-top:-1px}
+.progress-remain b{color:#efa7c5}
+.progress-bar{height:5px;background:#4a3947;border-radius:99px;overflow:hidden;margin:7px 25px 0}
+.progress-bar i{display:block;width:0;height:100%;background:#efa7c5;border-radius:99px;transition:width .2s}
+
+.reset-line{
+  text-align:center;color:#553c50;font-size:11px;font-weight:800;margin:7px 0 6px;
+}
+.reset-line b{font-size:10px}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:0 0 0}
+.tab{
+  padding:11px 6px;border-radius:16px 16px 0 0;background:#e7a8c2;
+  color:#fff;font-weight:1000;font-size:13px;text-shadow:0 1px 2px rgba(90,42,69,.2)
+}
+.tab.active{background:#30232e}
+
+.panel{
+  background:#2a212b;border:1px solid #5a4354;border-radius:0 0 20px 20px;
+  padding:10px 12px 12px;color:#fff;box-shadow:0 8px 20px rgba(48,28,45,.17)
+}
+.head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px}
+.title{font-size:14px;font-weight:1000}
+.note{font-size:9px;color:#c7aebe;margin-top:2px}
+.reset-btn,.del{
+  padding:7px 9px;border-radius:10px;background:#3c2d3a;color:#efb1cb;
+  font-size:9px;font-weight:1000
+}
+.task{
+  display:flex;align-items:center;gap:9px;padding:9px 3px;
+  border-bottom:1px solid #4a3947;min-height:47px
+}
+.task:last-child{border-bottom:0}
+.check{
+  width:27px;height:27px;border-radius:50%;flex:none;display:grid;place-items:center;
+  border:1.5px solid #c7aabe;background:transparent;color:#fff;font-weight:1000;font-size:15px
+}
+.done .check{background:#e89dbc;border-color:#e89dbc}
+.info{flex:1;min-width:0}.name{font-size:12px;font-weight:900;line-height:1.3;color:#fff}
+.done .name{color:#c0adb9;text-decoration:none}
+.task .note{color:#aa94a4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.complete{flex:none;color:#efacc7;font-size:9px;font-weight:1000}
+.task .del{background:transparent;color:#9d8295;padding:5px}
+.form{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:9px}
+.form input{
+  width:100%;min-width:0;padding:10px;border:1px solid #665064;border-radius:12px;
+  background:#382b38;color:#fff;outline:0;font-size:11px
+}
+.form input::placeholder{color:#9d8999}
+.add,.save{
+  padding:0 14px;border-radius:12px;background:linear-gradient(#e9a5c2,#d98dae);
+  color:#fff;font-size:11px;font-weight:1000;box-shadow:0 4px 10px rgba(0,0,0,.12)
+}
+
+.settings-panel{
+  margin-top:8px;border-radius:20px;background:#2a212b;color:#fff;
+  padding:13px;border:1px solid #5a4354
+}
+.setting{margin-top:12px}.setting label{display:block;color:#c4a9b9;font-size:10px;margin-bottom:5px}
+.charlist{display:flex;gap:6px;overflow:auto;padding:2px 0 6px}
+.chip{white-space:nowrap;padding:8px 11px;border-radius:11px;background:#3b2d3a;border:1px solid #60495b;color:#eacbd9;font-size:10px;font-weight:900}
+.chip.sel{background:#e9a1bf;color:#fff;border-color:#e9a1bf}
+.setting input,.setting select{width:100%;padding:10px;border:1px solid #60495b;border-radius:10px;background:#382b38;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.install{margin-top:11px;padding:10px;border:1px dashed #9e6886;border-radius:14px;background:#342733;color:#c9adbd;font-size:10px;line-height:1.6}
+
+.bottom-nav{
+  display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr;align-items:end;
+  margin-top:12px;padding:7px 5px 4px;border-radius:21px;
+  background:#29202a;box-shadow:0 9px 22px rgba(45,27,42,.25)
+}
+.nav{
+  min-height:47px;background:transparent;color:#d2bccb;border-radius:12px;
+  font-size:9px;font-weight:900
+}
+.nav .ico{display:block;font-size:21px;line-height:22px;margin-bottom:2px}
+.nav.active{color:#f0a8c6}
+.nav-heart{
+  height:61px;margin-top:-24px;border-radius:50%;
+  border:4px solid #29202a;background:linear-gradient(145deg,#efb0ca,#ca82a7);
+  color:#fff;box-shadow:0 5px 14px rgba(0,0,0,.2)
+}
+.nav-heart .ico{font-size:28px;padding-top:4px}
+.footer{text-align:center;color:#a8869e;font-size:9px;padding:9px 0}
+
+[hidden]{display:none!important}
+@media(max-width:520px){
+  .hero-main{grid-template-columns:112px 1fr auto}
+  .char{width:112px;height:112px}
+  .brand h1{font-size:25px}.brand .eng{font-size:16px}
+}
+@media(max-width:400px){
+  .app{padding-left:8px;padding-right:8px}.top-lace{margin-left:-8px;margin-right:-8px}
+  .hero-main{grid-template-columns:88px 1fr auto;gap:7px}
+  .char{width:88px;height:88px;border-radius:15px}
+  .brand h1{font-size:20px}.brand .eng{font-size:14px}
+  .tag{font-size:8px;padding:4px 8px}.charname{font-size:12px}.level{font-size:8px}
+  .switch{font-size:8px;padding:8px 7px}.progress-number{font-size:30px}
+}
+
+/* Calendar */
+.calendar-panel{
+  margin-top:8px;background:#2a212b;color:#fff;border:1px solid #5a4354;
+  border-radius:20px;padding:12px;box-shadow:0 8px 20px rgba(48,28,45,.17)
+}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cal-month{font-size:15px;font-weight:1000;color:#f4c2d7}
+.cal-nav{width:34px;height:30px;border-radius:10px;background:#3b2d3a;color:#f0aec8;font-weight:1000}
+.weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.weekdays div{text-align:center;font-size:9px;color:#bfa7b7;padding:3px 0}
+.calendar-grid{margin-top:4px}
+.day{
+  min-height:42px;border-radius:10px;background:#342934;border:1px solid #473747;
+  color:#eee0e8;padding:4px;font-size:10px;text-align:left;position:relative
+}
+.day.muted{opacity:.32}.day.today{border-color:#eba5c3;box-shadow:inset 0 0 0 1px #eba5c3}
+.day.selected{background:#e39ab8;color:#fff;border-color:#efb4cc}
+.day .num{font-weight:1000}.day .event-dot{position:absolute;right:5px;bottom:5px;width:5px;height:5px;border-radius:50%;background:#f4b5ce}
+.event-editor{margin-top:10px;padding:10px;border-radius:14px;background:#342833;border:1px solid #554052}
+.event-date{font-size:10px;color:#d9bdcd;font-weight:900;margin-bottom:6px}
+.event-row{display:grid;grid-template-columns:1fr auto;gap:6px}
+.event-row input{min-width:0;padding:10px;border-radius:10px;border:1px solid #624b5c;background:#2b222c;color:#fff;font-size:11px}
+.events{margin-top:7px;display:grid;gap:5px}
+.event-item{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:7px 8px;border-radius:9px;background:#3b2d3a;font-size:10px}
+.event-item button{background:transparent;color:#c49caf;font-size:10px}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-lace"><span class="ribbon l">♥</span><span class="lace-bow">♣</span><span class="lace-bow">♥</span><span class="lace-bow">♣</span><span class="ribbon r">♥</span></div>
+
+  <section class="hero">
+    <span class="wing w1">ʚɞ</span><span class="wing w2">ʚɞ</span>
+    <span class="wing w3">ʚɞ</span><span class="wing w4">ʚɞ</span>
+    <div class="hero-main">
+      <img class="char" src="assets/character.jpg" alt="ゆにゃりりむ">
+      <div class="brand">
+        <h1>AION2</h1>
+        <div class="eng">Daily Manager</div>
+        <div class="tag">ゆにゃりりむの小悪魔な日課帳</div>
+        <div class="charname" id="charName">ゆにゃりりむ</div>
+        <div class="level" id="charLevel">Lv.50 / キュア ウィング</div>
+      </div>
+      <button class="switch" id="quickSettings">キャラ切替<br>⌄</button>
+    </div>
+
+    <div class="progress-card">
+      <span class="deco-wing left">ʚɞ</span><span class="deco-wing right">ʚɞ</span>
+      <div class="progress-title" id="progressTitle">今日の進捗</div>
+      <div class="progress-number"><span id="doneNum">0</span> / <span id="totalNum">0</span><span>完了</span></div>
+      <div class="progress-remain" id="remainText">あと <b>0</b> 個！</div>
+      <div class="progress-bar"><i id="mainBar"></i></div>
+    </div>
+  </section>
+
+  <div class="reset-line" id="resetLine">日課リセット：毎日 04:00　♡</div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="daily">♡ 日課</button>
+    <button class="tab" data-tab="weekly">♆ 週課</button>
+  </div>
+
+  <section class="panel" id="daily">
+    <div class="head">
+      <div><div class="title">♡ 今日のやること</div><div class="note" id="dreset"></div></div>
+      <button class="reset-btn" id="rd">↻ リセット</button>
+    </div>
+    <div id="dl"></div>
+    <div class="form"><input id="di" placeholder="日課を追加…"><button class="add" id="ad">ʚɞ ＋追加</button></div>
+  </section>
+
+  <section class="panel" id="weekly" hidden>
+    <div class="head">
+      <div><div class="title">♆ 今週のやること</div><div class="note" id="wreset"></div></div>
+      <button class="reset-btn" id="rw">↻ リセット</button>
+    </div>
+    <div id="wl"></div>
+    <div class="form"><input id="wi" placeholder="週課を追加…"><button class="add" id="aw">ʚɞ ＋追加</button></div>
+  </section>
+
+
+  <section class="calendar-panel" id="calendar" hidden>
+    <div class="cal-head">
+      <button class="cal-nav" id="prevMonth">‹</button>
+      <div class="cal-month" id="calMonth"></div>
+      <button class="cal-nav" id="nextMonth">›</button>
+    </div>
+    <div class="weekdays"><div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div class="event-editor">
+      <div class="event-date" id="eventDate">日付を選択してね ♡</div>
+      <div class="event-row">
+        <input id="eventInput" placeholder="予定を書き込む…">
+        <button class="add" id="addEvent" style="height:38px">＋追加</button>
+      </div>
+      <div class="events" id="events"></div>
+    </div>
+  </section>
+
+  <section class="settings-panel" id="settings" hidden>
+    <div class="title">⚙ 小悪魔設定</div>
+    <div class="setting">
+      <label>キャラクター</label>
+      <div class="charlist" id="chars"></div>
+      <div class="form"><input id="ci" placeholder="キャラクター名を追加…"><button class="add" id="ac">追加</button></div>
+    </div>
+    <div class="setting grid">
+      <div><label>日課リセット時刻</label><input id="hour" type="number" min="0" max="23"></div>
+      <div><label>週課リセット曜日</label>
+        <select id="day">
+          <option value="1">月曜日</option><option value="2">火曜日</option><option value="3">水曜日</option>
+          <option value="4">木曜日</option><option value="5">金曜日</option><option value="6">土曜日</option><option value="0">日曜日</option>
+        </select>
+      </div>
+    </div>
+    <button class="save" id="save" style="width:100%;height:40px;margin-top:10px">設定を保存 ♡</button>
+    <div class="install"><b>📱 ホーム画面に置く方法</b><br>Safariで公開URLを開く → 共有 →「ホーム画面に追加」。</div>
+  </section>
+
+  <nav class="bottom-nav">
+    <button class="nav active" data-nav="home"><span class="ico">⌂</span>ホーム</button>
+    <button class="nav" data-nav="calendar"><span class="ico">▣</span>カレンダー</button>
+    <button class="nav nav-heart" data-nav="heart"><span class="ico">♥</span></button>
+    <button class="nav" data-nav="reset"><span class="ico">↻</span>リセット</button>
+    <button class="nav" data-nav="settings"><span class="ico">⚙</span>設定</button>
+  </nav>
+  <div class="footer">ゆにゃりりむのAION2おともだち ♡</div>
+</div>
+
+<script>
+const K="aion2_lilith_pwa_v4",OLD="aion2_lilith_pwa_v2";
+const uid=()=>Math.random().toString(36).slice(2)+Date.now();
+const DD=[
+ ["天族のデイリークエストを完了する","0 / 1"],["エリュシオンの委託を完了する",""],["アビス要塞の討伐を完了する",""],
+ ["インスタンスダンジョンを1回クリア","0 / 1"],["フィールドボスに参加する",""],["製作または採集を10回行う","3 / 10"],["ギルド支援を行う","0 / 1"]
+];
+const WW=[
+ ["要塞戦に参加する",""],["アビス深層部を5回クリア","1 / 5"],["週間インスタンスをすべてクリア",""],
+ ["名誉ポイントを1,000獲得","250 / 1000"],["ギルドレイドに参加する","0 / 1"],["週間製作を10回行う",""],
+ ["高級アイテムを1回製作する","0 / 1"],["週間クエストをすべて完了する","0 / 1"]
+];
+
+let d=JSON.parse(localStorage.getItem(K)||"null");
+if(!d){
+  const old=JSON.parse(localStorage.getItem(OLD)||"null");
+  if(old){d=old}
+  else{
+    d={s:{hour:4,day:1},chars:{},cur:"ゆにゃりりむ"};
+    d.chars[d.cur]={
+      level:"Lv.50 / キュア ウィング",
+      daily:DD.map(x=>({id:uid(),name:x[0],note:x[1],done:false})),
+      weekly:WW.map(x=>({id:uid(),name:x[0],note:x[1],done:false})),ds:null,ws:null
+    };
+  }
+}
+d.s=d.s||{hour:4,day:1}; d.chars=d.chars||{};
+if(!d.chars[d.cur])d.chars[d.cur]={level:"Lv.50 / キュア ウィング",daily:[],weekly:[],ds:null,ws:null};
+const $=id=>document.getElementById(id);
+const save=()=>localStorage.setItem(K,JSON.stringify(d));
+const c=()=>d.chars[d.cur];
+
+function reset(){
+  const now=new Date(),e=new Date(now);
+  if(now.getHours()<d.s.hour)e.setDate(e.getDate()-1);
+  const ds=e.toISOString().slice(0,10);
+  if(c().ds!==ds){c().daily.forEach(t=>t.done=false);c().ds=ds}
+  const diff=(e.getDay()-d.s.day+7)%7,w=new Date(e);w.setDate(w.getDate()-diff);
+  const ws=w.toISOString().slice(0,10);
+  if(c().ws!==ws){c().weekly.forEach(t=>t.done=false);c().ws=ws}
+  save();
+}
+function list(type){
+  const el=$(type==="daily"?"dl":"wl"),a=c()[type];el.innerHTML="";
+  if(!a.length){el.innerHTML='<div style="text-align:center;padding:22px;color:#b79faf;font-size:11px">まだタスクがないよ♡</div>';return}
+  a.forEach(t=>{
+    const r=document.createElement("div");r.className="task"+(t.done?" done":"");
+    r.innerHTML='<div class="check">'+(t.done?"✓":"")+'</div><div class="info"><div class="name"></div><div class="note"></div></div>'+
+      (t.done?'<div class="complete">♡ 完了 ♡</div>':"")+'<button class="del">削除</button>';
+    r.querySelector(".name").textContent=t.name;r.querySelector(".note").textContent=t.note||"";
+    r.querySelector(".check").onclick=()=>{t.done=!t.done;save();render()};
+    r.querySelector(".del").onclick=()=>{if(confirm("削除する？")){c()[type]=c()[type].filter(x=>x.id!==t.id);save();render()}};
+    el.appendChild(r);
+  });
+}
+function updateProgress(type){
+  const a=c()[type],done=a.filter(x=>x.done).length,total=a.length,rem=total-done;
+  $("doneNum").textContent=done;$("totalNum").textContent=total;
+  $("remainText").innerHTML=total?(rem?'あと <b>'+rem+'</b> 個！':'♡ <b>全部完了</b> ♡'):'タスクを追加してね';
+  $("mainBar").style.width=(total?done/total*100:0)+"%";
+  $("progressTitle").textContent=type==="daily"?"今日の進捗":"今週の進捗";
+}
+function chars(){
+  const e=$("chars");e.innerHTML="";
+  Object.keys(d.chars).forEach(n=>{
+    const b=document.createElement("button");b.className="chip"+(n===d.cur?" sel":"");b.textContent=n;
+    b.onclick=()=>{d.cur=n;save();showMain("daily");render()};e.appendChild(b)
+  });
+}
+
+let calCursor=new Date();
+calCursor.setDate(1);
+let selectedDate=null;
+d.events=d.events||{};
+
+const pad=n=>String(n).padStart(2,"0");
+const dateKey=x=>x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate());
+
+function renderCalendar(){
+  const y=calCursor.getFullYear(),m=calCursor.getMonth();
+  $("calMonth").textContent=y+"年 "+(m+1)+"月";
+  const grid=$("calendarGrid");grid.innerHTML="";
+  const first=new Date(y,m,1),start=first.getDay(),last=new Date(y,m+1,0).getDate();
+  const prevLast=new Date(y,m,0).getDate();
+  for(let i=0;i<42;i++){
+    const cell=document.createElement("button");cell.className="day";
+    let n=i-start+1, yy=y,mm=m;
+    if(n<1){n=prevLast+n;mm=m-1;if(mm<0){mm=11;yy--};cell.classList.add("muted")}
+    else if(n>last){n=n-last;mm=m+1;if(mm>11){mm=0;yy++};cell.classList.add("muted")}
+    const key=yy+"-"+pad(mm+1)+"-"+pad(n);
+    const todayKey=dateKey(new Date());
+    if(key===todayKey)cell.classList.add("today");
+    if(key===selectedDate)cell.classList.add("selected");
+    cell.innerHTML='<span class="num">'+n+'</span>';
+    if((d.events[key]||[]).length)cell.innerHTML+='<span class="event-dot"></span>';
+    cell.onclick=()=>{
+      selectedDate=key;renderCalendar();renderEvents();
+    };
+    grid.appendChild(cell);
+  }
+  if(!selectedDate) selectedDate=dateKey(new Date());
+  renderEvents();
+}
+function renderEvents(){
+  if(!selectedDate)return;
+  const parts=selectedDate.split("-");
+  $("eventDate").textContent=parts[0]+"年"+Number(parts[1])+"月"+Number(parts[2])+"日の予定 ♡";
+  const a=d.events[selectedDate]||[],e=$("events");e.innerHTML="";
+  if(!a.length){e.innerHTML='<div style="color:#9f8999;font-size:10px;text-align:center;padding:5px">予定はまだないよ</div>';return}
+  a.forEach((ev,i)=>{
+    const row=document.createElement("div");row.className="event-item";
+    const span=document.createElement("span");span.textContent="♥ "+ev;
+    const del=document.createElement("button");del.textContent="削除";
+    del.onclick=()=>{a.splice(i,1);if(!a.length)delete d.events[selectedDate];save();renderCalendar()};
+    row.append(span,del);e.appendChild(row);
+  });
+}
+$("prevMonth").onclick=()=>{calCursor.setMonth(calCursor.getMonth()-1);renderCalendar()};
+$("nextMonth").onclick=()=>{calCursor.setMonth(calCursor.getMonth()+1);renderCalendar()};
+$("addEvent").onclick=()=>{
+  const v=$("eventInput").value.trim();if(!v||!selectedDate)return;
+  d.events[selectedDate]=d.events[selectedDate]||[];d.events[selectedDate].push(v);
+  $("eventInput").value="";save();renderCalendar();
+};
+$("eventInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("addEvent").click()});
+
+function render(){
+  reset();
+  $("charName").textContent=d.cur;
+  $("charLevel").textContent=c().level||"Lv.50 / キュア ウィング";
+  updateProgress(document.getElementById("weekly").hidden?"daily":"weekly");
+  list("daily");list("weekly");chars();
+  $("hour").value=d.s.hour;$("day").value=d.s.day;
+  $("dreset").textContent="毎日 "+String(d.s.hour).padStart(2,"0")+":00 にリセット";
+  $("wreset").textContent="毎週 "+["日","月","火","水","木","金","土"][d.s.day]+"曜日にリセット";
+  $("resetLine").textContent=(document.getElementById("weekly").hidden?"日課":"週課")+"リセット："+
+    (document.getElementById("weekly").hidden?"毎日 ":"毎週 "+["日","月","火","水","木","金","土"][d.s.day]+"曜日 ")+String(d.s.hour).padStart(2,"0")+":00";
+}
+function showMain(tab){
+  $("settings").hidden=true;$("calendar").hidden=true;$("daily").hidden=tab!=="daily";$("weekly").hidden=tab!=="weekly";
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===tab));
+  document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.nav==="home"));
+  updateProgress(tab);
+  $("resetLine").textContent=(tab==="daily"?"日課リセット：毎日 ":"週課リセット：毎週 "+["日","月","火","水","木","金","土"][d.s.day]+"曜日 ")+
+    String(d.s.hour).padStart(2,"0")+":00";
+}
+function showSettings(){
+  $("daily").hidden=true;$("weekly").hidden=true;$("calendar").hidden=true;$("settings").hidden=false;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.nav==="settings"));
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showMain(b.dataset.tab));
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>{
+  if(b.dataset.nav==="settings")showSettings();
+  else if(b.dataset.nav==="calendar"){
+    $("settings").hidden=true;$("daily").hidden=true;$("weekly").hidden=true;$("calendar").hidden=false;
+    document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.nav==="calendar"));
+    renderCalendar();
+  }else if(b.dataset.nav==="reset"){
+    if(confirm("日課と週課を今すぐリセットする？")){c().daily.forEach(t=>t.done=false);c().weekly.forEach(t=>t.done=false);save();showMain("daily");render()}
+  }else showMain("daily");
+});
+$("quickSettings").onclick=showSettings;
+$("ad").onclick=()=>{
+  const n=$("di").value.trim();if(!n)return;
+  c().daily.push({id:uid(),name:n,note:"",done:false});$("di").value="";save();render()
+};
+$("aw").onclick=()=>{
+  const n=$("wi").value.trim();if(!n)return;
+  c().weekly.push({id:uid(),name:n,note:"",done:false});$("wi").value="";save();render()
+};
+$("ac").onclick=()=>{
+  const n=$("ci").value.trim();if(!n||d.chars[n])return;
+  d.chars[n]={level:"Lv.50 / キュア ウィング",daily:[],weekly:[],ds:null,ws:null};d.cur=n;$("ci").value="";save();render()
+};
+$("rd").onclick=()=>{c().daily.forEach(t=>t.done=false);save();render()};
+$("rw").onclick=()=>{c().weekly.forEach(t=>t.done=false);save();render()};
+$("save").onclick=()=>{
+  d.s.hour=Math.max(0,Math.min(23,Number($("hour").value)||0));d.s.day=Number($("day").value);
+  c().ds=null;c().ws=null;save();render();alert("設定したよ♡")
+};
+render();
+renderCalendar();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
