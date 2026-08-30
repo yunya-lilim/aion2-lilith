@@ -561,6 +561,11 @@ $("save").onclick=()=>{
   c().ds=null;c().ws=null;save();render();alert("設定したよ♡")
 };
 render();
+
+const eventContent=$("eventContent");
+const today=new Date().getDay();
+eventContent.textContent=EVENTS[today]||"";
+
 renderCalendar();
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
