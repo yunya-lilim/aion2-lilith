@@ -396,6 +396,7 @@ if(!d){
 }
 d.s=d.s||{hour:4,day:1}; d.chars=d.chars||{};
 if(!d.chars[d.cur])d.chars[d.cur]={level:"Lv.50 / キュア ウィング",daily:[],weekly:[],ds:null,ws:null};
+d.chars[d.cur].daily=DD.map(x=>({id:uid(),name:x[0],note:x[1],done:false}));
 const $=id=>document.getElementById(id);
 const save=()=>localStorage.setItem(K,JSON.stringify(d));
 const c=()=>d.chars[d.cur];
