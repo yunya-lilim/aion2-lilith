@@ -564,7 +564,12 @@ render();
 
 const eventContent=$("eventContent");
 const today=new Date().getDay();
-eventContent.textContent=EVENTS[today]||"";
+
+if(EVENTS[today]){
+  eventContent.innerHTML='୨୧ アーティファクト戦 ୨୧<br><span>23:00〜</span>';
+}else{
+  eventContent.innerHTML="";
+}
 
 renderCalendar();
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
